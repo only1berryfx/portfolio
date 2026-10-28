@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SIEM Detection Lab | Apex Labs</title>
+    <style>
+        body { background: #07090e; color: #94a3b8; font-family: sans-serif; max-width: 700px; margin: 40px auto; padding: 20px; line-height: 1.6; }
+        h1 { color: #fff; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+        pre { background: #0b0f19; padding: 15px; border-radius: 8px; color: #60a5fa; overflow-x: auto; }
+        .back-btn { color: #3b82f6; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-btn">← Back to Portfolio</a>
+    <h1 style="margin-top:20px;">SIEM Detection & Event Logging Lab</h1>
+    <p>This lab demonstrates automated log ingestion, event correlation, and detection queries built in Splunk SIEM for monitoring brute-force authentication attacks.</p>
+    
+    <h3>Detection Rule (Splunk SPL)</h3>
+    <pre>index=security sourcetype=sysmon EventCode=4625
+| stats count by src_ip, user
+| where count > 20
+| sort - count</pre>
+
+    <p><strong>Status:</strong> Homelab architecture operational. Logs forwarded via Sysmon Universal Forwarder.</p>
+</body>
+</html>
