@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SOC Incident Report: HealthGuard Network Compromise</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: #1e293b; max-width: 850px; margin: 40px auto; padding: 0 20px; }
+        h1 { border-bottom: 2px solid #0f172a; padding-bottom: 10px; color: #0f172a; }
+        h2 { color: #1e3a8a; margin-top: 30px; border-bottom: 1px solid #cbd5e1; padding-bottom: 5px; }
+        .meta-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .meta-table td { padding: 8px 12px; border: 1px solid #cbd5e1; }
+        .meta-table td.label { font-weight: bold; background: #f8fafc; width: 25%; }
+        .badge-high { background: #fee2e2; color: #991b1b; padding: 2px 8px; border-radius: 4px; font-weight: bold; }
+        code, pre { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+        pre { padding: 12px; overflow-x: auto; }
+        ul { padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+    <h1>Cybersecurity Incident Investigation Report</h1>
+    
+    <table class="meta-table">
+        <tr>
+            <td class="label">Incident ID</td>
+            <td>INC-2026-0842</td>
+            <td class="label">Severity Level</td>
+            <td><span class="badge-high">HIGH / CRITICAL</span></td>
+        </tr>
+        <tr>
+            <td class="label">Target System</td>
+            <td>HealthGuard Medical Centre - Auth Server</td>
+            <td class="label">Investigation Date</td>
+            <td>September 21, 2026</td>
+        </tr>
+        <tr>
+            <td class="label">Lead Analyst</td>
+            <td>SOC Security Engineering Team</td>
+            <td class="label">Status</td>
+            <td>Remediated / Closed</td>
+        </tr>
+    </table>
+
+    <h2>1. Executive Summary</h2>
+    <p>On September 18, 2026, an automated alert triggered in the primary SIEM indicating anomalous authentication attempts targeting internal infrastructure. Subsequent packet analysis (PCAP) and Sysmon host event logs confirmed an external brute-force attempt leading to unauthorized credential access on host <code>10.0.4.15</code>.</p>
+
+    <h2>2. Threat Vector & Technical Analysis</h2>
+    <ul>
+        <li><strong>Initial Access:</strong> Port scan identified open SSH (Port 22) and HTTP (Port 80) on external perimeter interface.</li>
+        <li><strong>Attack Mechanism:</strong> High-frequency automated dictionary attack originating from malicious IP <code>192.168.1.105</code>.</li>
+        <li><strong>Forensic Artifacts:</strong> Sysmon Event ID 4625 (Failed Logon) spikes exceeding 450 attempts within 3 minutes, followed by Event ID 4624 (Successful Logon).</li>
+    </ul>
+
+    <h2>3. Indicators of Compromise (IOCs)</h2>
+    <table class="meta-table">
+        <tr>
+            <td class="label">Attacker IP</td>
+            <td><code>192.168.1.105</code></td>
+        </tr>
+        <tr>
+            <td class="label">Compromised User</td>
+            <td><code>svc_admin</code></td>
+        </tr>
+        <tr>
+            <td class="label">Malware / Tool Hash</td>
+            <td><code>e99a18c428cb38d5f260853678922e03</code> (SHA256)</td>
+        </tr>
+    </table>
+
+    <h2>4. Mitigation & Remediation Actions</h2>
+    <ol>
+        <li>Blocked source IP <code>192.168.1.105</code> at perimeter firewall ruleset.</li>
+        <li>Reset credentials for account <code>svc_admin</code> and enforced multi-factor authentication (MFA).</li>
+        <li>Implemented rate-limiting (fail2ban) on SSH endpoints to throttle rapid authentication failures.</li>
+    </ol>
+
+</body>
+</html>
